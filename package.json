@@ -2,10 +2,11 @@
   "name": "eris",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
-  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "npm run build && node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +25,9 @@
     "trailingComma": "es5",
     "printWidth": 80,
     "arrowParens": "always"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.0",
+    "typescript": "^5.0.4"
   }
 }

@@ -1,14 +1,14 @@
 import Eris from 'eris';
 import dotenv from 'dotenv';
-import { headsOrTails } from './commands/heads-or-tails.js';
-import { currentPubMap } from './commands/apex.js';
-import { autoSchedule } from './commands/auto.js';
-
-const serverId = '439897141025046532';
+import { headsOrTails } from './commands/heads-or-tails';
+import { currentPubMap } from './commands/apex';
+import { autoSchedule } from './commands/auto';
 
 dotenv.config();
 
-const bot = new Eris(process.env.BOT_TOKEN);
+const bot: Eris.Client = new Eris.Client(process.env.BOT_TOKEN as string);
+
+const serverId = process.env.DISCORD_ID as string;
 
 bot.on('ready', async () => {
     console.log('Ready!');
@@ -34,7 +34,7 @@ bot.on('ready', async () => {
     });
 });
 
-bot.on('messageCreate', async (msg) => {
+bot.on('messageCreate', async (msg: Eris.Message) => {
     console.log(msg.channel.id);
 
     switch (msg.content) {
@@ -56,19 +56,19 @@ bot.on('messageCreate', async (msg) => {
     }
 });
 
-bot.on('interactionCreate', async (Interaction) => {
-    switch (Interaction.data.name) {
+bot.on('interactionCreate', async (interaction: Eris.CommandInteraction) => {
+    switch (interaction.data.name) {
         case 'pof':
-            Interaction.createMessage(headsOrTails());
+            interaction.createMessage(headsOrTails());
             break;
         case 'plouf':
-            Interaction.createMessage('Cela va au delà de mes compétences.');
+            interaction.createMessage('Cela va au delà de mes compétences.');
             break;
         case 'rota':
-            Interaction.createMessage(await currentPubMap());
+            interaction.createMessage(await currentPubMap());
             break;
         case 'auto':
-            Interaction.createMessage(autoSchedule());
+            interaction.createMessage(autoSchedule());
             break;
     }
 });
