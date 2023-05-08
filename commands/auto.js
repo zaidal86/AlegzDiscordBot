@@ -8,13 +8,13 @@ export const autoSchedule = () => {
     let schedule;
 
     if (daysDifference >= 0 && daysDifference < 2) {
-        schedule = 'Auto travaille de 5h à 13h';
+        schedule = 'Auto travaille de 5h à 13h.';
     } else if (daysDifference >= 2 && daysDifference < 4) {
-        schedule = 'Auto travaille de 13h à 21h';
+        schedule = 'Auto travaille de 13h à 21h.';
     } else if (daysDifference >= 4 && daysDifference < 6) {
-        schedule = 'Auto travaille de 21h à 5h';
+        schedule = 'Auto travaille de 21h à 5h.';
     } else {
-        schedule = "Auto ne travaille pas aujourd'hui";
+        schedule = "Auto ne travaille pas aujourd'hui.";
     }
 
     return schedule;
