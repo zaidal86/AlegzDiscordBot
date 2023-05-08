@@ -25,7 +25,7 @@ bot.on('messageCreate', (msg) => {
                 'Cela va au delà de mes compétences.'
             );
             break;
-        case '!pub':
+        case '!rota':
             bot.createMessage(msg.channel.id, currentPubMap());
             break;
     }
