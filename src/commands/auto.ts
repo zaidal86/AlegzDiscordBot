@@ -23,7 +23,8 @@ export const autoSchedule = (): string => {
     workEnd.setHours(0, 0, 0, 0);
 
     if (daysDifference >= 0 && daysDifference < 6) {
-        workEnd.setHours((daysDifference % 2) * 8 + 5, 0, 0, 0);
+        const shiftEndHour = (daysDifference % 2) * 8 + 13;
+        workEnd.setHours(shiftEndHour, 0, 0, 0);
         const timeLeft: number =
             workEnd.getTime() - today.getTime() + 15 * 60 * 1000;
         const hoursLeft: number = Math.floor(timeLeft / (1000 * 60 * 60));
@@ -35,7 +36,7 @@ export const autoSchedule = (): string => {
         workEnd.setDate(today.getDate() + (6 - daysDifference));
         workEnd.setHours(5, 0, 0, 0);
         const timeLeft: number =
-            workEnd.getTime() - today.getTime() - 30 * 60 * 1000;
+            workEnd.getTime() - today.getTime() + 30 * 60 * 1000;
         const hoursLeft: number = Math.floor(timeLeft / (1000 * 60 * 60));
         const minutesLeft: number = Math.floor(
             (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
