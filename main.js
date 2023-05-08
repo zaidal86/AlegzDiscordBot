@@ -4,7 +4,7 @@ import { headsOrTails } from './commands/heads-or-tails.js';
 import { currentPubMap } from './commands/apex.js';
 import { autoSchedule } from './commands/auto.js';
 
-const IDServer = '439897141025046532';
+const serverId = '439897141025046532';
 
 dotenv.config();
 
@@ -12,30 +12,29 @@ const bot = new Eris(process.env.BOT_TOKEN);
 
 bot.on('ready', async () => {
     console.log('Ready!');
-    await bot.createGuildCommand(IDServer, {
+    await bot.createGuildCommand(serverId, {
         name: 'pof',
         type: 1,
-        description: 'headsOrTails',
-      });
-    await bot.createGuildCommand(IDServer, {
+        description: 'Demande pile ou face à Siri',
+    });
+    await bot.createGuildCommand(serverId, {
         name: 'plouf',
         type: 1,
-        description: 'plouf',
-      });
-    await bot.createGuildCommand(IDServer, {
+        description: 'Demande plouf à Siri',
+    });
+    await bot.createGuildCommand(serverId, {
         name: 'auto',
         type: 1,
-        description: 'auto horaire de travail',
-      });
-    await bot.createGuildCommand(IDServer, {
+        description: "Horaires d'auto",
+    });
+    await bot.createGuildCommand(serverId, {
         name: 'rota',
         type: 1,
-        description: 'map rotation',
-      });
+        description: 'Map actuelle en pub sur Apex Legends',
+    });
 });
 
 bot.on('messageCreate', async (msg) => {
-    // console.log(msg);
     console.log(msg.channel.id);
 
     switch (msg.content) {
@@ -63,9 +62,7 @@ bot.on('interactionCreate', async (Interaction) => {
             Interaction.createMessage(headsOrTails());
             break;
         case 'plouf':
-            Interaction.createMessage(
-                'Cela va au delà de mes compétences.'
-            );
+            Interaction.createMessage('Cela va au delà de mes compétences.');
             break;
         case 'rota':
             Interaction.createMessage(await currentPubMap());
@@ -73,7 +70,7 @@ bot.on('interactionCreate', async (Interaction) => {
         case 'auto':
             Interaction.createMessage(autoSchedule());
             break;
-        }
-  });
+    }
+});
 
 bot.connect();
