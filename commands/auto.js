@@ -17,5 +17,28 @@ export const autoSchedule = () => {
         schedule = "Aujourd'hui, auto ne travaille pas.";
     }
 
+    const currentTime = today.getHours() + today.getMinutes() / 60;
+    let timeLeft;
+
+    if (schedule.includes('ne travaille pas')) {
+        const nextWorkDay = 2 - (daysDifference % 2);
+        timeLeft = 5 - currentTime + (nextWorkDay - 1) * 24 - 0.5;
+        let timeText =
+            timeLeft > 24
+                ? `${Math.floor(timeLeft / 24)} jour${
+                      Math.floor(timeLeft / 24) > 1 ? 's' : ''
+                  } et `
+                : '';
+        schedule += ` Il s'en va dans ${timeText}${Math.floor(
+            timeLeft % 24
+        )} heures et ${Math.round((timeLeft % 1) * 60)} minutes.`;
+    } else {
+        const endHour = parseFloat(schedule.slice(-6, -4));
+        timeLeft = endHour - currentTime + 0.25;
+        schedule += ` Il reviendra dans ${Math.floor(
+            timeLeft
+        )} heures et ${Math.round((timeLeft % 1) * 60)} minutes.`;
+    }
+
     return schedule;
 };
