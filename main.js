@@ -2,6 +2,7 @@ import Eris from 'eris';
 import dotenv from 'dotenv';
 import { headsOrTails } from './commands/heads-or-tails.js';
 import { currentPubMap } from './commands/apex.js';
+import { autoSchedule } from './commands/auto.js';
 
 dotenv.config();
 
@@ -27,6 +28,9 @@ bot.on('messageCreate', (msg) => {
             break;
         case '!rota':
             bot.createMessage(msg.channel.id, currentPubMap());
+            break;
+        case '!auto':
+            bot.createMessage(msg.channel.id, autoSchedule());
             break;
     }
 });
