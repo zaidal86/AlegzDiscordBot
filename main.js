@@ -60,19 +60,18 @@ bot.on('messageCreate', async (msg) => {
 bot.on('interactionCreate', async (Interaction) => {
     switch (Interaction.data.name) {
         case 'pof':
-            Interaction.createMessage(msg.channel.id, headsOrTails());
+            Interaction.createMessage(headsOrTails());
             break;
         case 'plouf':
             Interaction.createMessage(
-                msg.channel.id,
                 'Cela va au delà de mes compétences.'
             );
             break;
         case 'rota':
-            Interaction.createMessage(msg.channel.id, await currentPubMap());
+            Interaction.createMessage(await currentPubMap());
             break;
         case 'auto':
-            Interaction.createMessage(msg.channel.id, autoSchedule());
+            Interaction.createMessage(autoSchedule());
             break;
         }
   });
