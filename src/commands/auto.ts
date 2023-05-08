@@ -19,35 +19,31 @@ export const autoSchedule = (): string => {
         schedule = "Aujourd'hui, auto ne travaille pas.";
     }
 
+    const workStart: Date = new Date(today);
     const workEnd: Date = new Date(today);
+    workStart.setHours(0, 0, 0, 0);
     workEnd.setHours(0, 0, 0, 0);
 
     if (daysDifference >= 0 && daysDifference < 6) {
-        const shiftEndHour = (daysDifference % 2) * 8 + 13;
+        const shiftStartHour = (daysDifference % 2) * 8 + 5;
+        const shiftEndHour = shiftStartHour + 8;
+        workStart.setHours(shiftStartHour, 0, 0, 0);
         workEnd.setHours(shiftEndHour, 0, 0, 0);
-        const timeLeft: number =
-            workEnd.getTime() - today.getTime() + 15 * 60 * 1000;
-        const hoursLeft: number = Math.floor(timeLeft / (1000 * 60 * 60));
-        const minutesLeft: number = Math.floor(
-            (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        schedule += ` Il revient dans ${hoursLeft} heures et ${minutesLeft} minutes.`;
-    } else {
-        workEnd.setDate(today.getDate() + (6 - daysDifference));
-        workEnd.setHours(5, 0, 0, 0);
-        const timeLeft: number =
-            workEnd.getTime() - today.getTime() + 30 * 60 * 1000;
-        const hoursLeft: number = Math.floor(timeLeft / (1000 * 60 * 60));
-        const minutesLeft: number = Math.floor(
-            (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        const daysLeft: number = 6 - daysDifference;
-
-        if (daysLeft > 0) {
-            schedule += ` Il s'en va dans ${daysLeft} jour${
-                daysLeft > 1 ? 's' : ''
-            }, ${hoursLeft} heures et ${minutesLeft} minutes.`;
-        } else {
+        if (today >= workStart && today <= workEnd) {
+            const timeLeft: number =
+                workEnd.getTime() - today.getTime() + 15 * 60 * 1000;
+            const hoursLeft: number = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutesLeft: number = Math.floor(
+                (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+            );
+            schedule += ` Il finit dans ${hoursLeft} heures et ${minutesLeft} minutes.`;
+        } else if (today < workStart) {
+            const timeLeft: number =
+                workStart.getTime() - today.getTime() - 30 * 60 * 1000;
+            const hoursLeft: number = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutesLeft: number = Math.floor(
+                (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+            );
             schedule += ` Il s'en va dans ${hoursLeft} heures et ${minutesLeft} minutes.`;
         }
     }
