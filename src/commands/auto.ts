@@ -17,27 +17,28 @@ export const autoSchedule = (): string => {
         schedule = "Aujourd'hui, auto ne travaille pas.";
     }
 
-    const currentTime: number = today.getHours() + today.getMinutes() / 60;
-    let timeLeft: number;
+    const workEnd: Date = new Date(today);
+    workEnd.setHours(0, 0, 0, 0);
 
-    if (schedule.includes('ne travaille pas')) {
-        const nextWorkDay: number = 2 - (daysDifference % 2);
-        timeLeft = 5 - currentTime + (nextWorkDay - 1) * 24 - 0.5;
-        let timeText: string =
-            timeLeft > 24
-                ? `${Math.floor(timeLeft / 24)} jour${
-                      Math.floor(timeLeft / 24) > 1 ? 's' : ''
-                  } et `
-                : '';
-        schedule += ` Il s'en va dans ${timeText}${Math.floor(
-            timeLeft % 24
-        )} heures et ${Math.round((timeLeft % 1) * 60)} minutes.`;
+    if (daysDifference >= 0 && daysDifference < 6) {
+        workEnd.setHours((daysDifference % 2) * 8 + 5, 0, 0, 0);
+        const timeLeft: number = workEnd.getTime() - today.getTime() + (15 * 60 * 1000);
+        const hoursLeft: number = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutesLeft: number = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        schedule += ` Il revient dans ${hoursLeft} heures et ${minutesLeft} minutes.`;
     } else {
-        const endHour: number = schedule.includes("21h") ? 29 : parseFloat(schedule.slice(-6, -4));
-        timeLeft = endHour - currentTime + 0.25;
-        schedule += ` Il reviendra dans ${Math.floor(
-            timeLeft
-        )} heures et ${Math.round((timeLeft % 1) * 60)} minutes.`;
+        workEnd.setDate(today.getDate() + (6 - daysDifference));
+        workEnd.setHours(5, 0, 0, 0);
+        const timeLeft: number = workEnd.getTime() - today.getTime() - (30 * 60 * 1000);
+        const hoursLeft: number = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutesLeft: number = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const daysLeft: number = 6 - daysDifference;
+
+        if (daysLeft > 0) {
+            schedule += ` Il s'en va dans ${daysLeft} jour${daysLeft > 1 ? 's' : ''}, ${hoursLeft} heures et ${minutesLeft} minutes.`;
+        } else {
+            schedule += ` Il s'en va dans ${hoursLeft} heures et ${minutesLeft} minutes.`;
+        }
     }
 
     return schedule;
