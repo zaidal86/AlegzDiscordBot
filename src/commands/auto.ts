@@ -33,7 +33,7 @@ export const autoSchedule = (): string => {
             timeLeft % 24
         )} heures et ${Math.round((timeLeft % 1) * 60)} minutes.`;
     } else {
-        const endHour: number = parseFloat(schedule.slice(-6, -4));
+        const endHour: number = schedule.includes("21h") ? 29 : parseFloat(schedule.slice(-6, -4));
         timeLeft = endHour - currentTime + 0.25;
         schedule += ` Il reviendra dans ${Math.floor(
             timeLeft
