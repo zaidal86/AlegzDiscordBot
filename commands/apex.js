@@ -14,7 +14,7 @@ export const currentPubMap = async () => {
     )
         .first()
         .text()
-        .replace('Battle Royale: ', 'Map actuelle : ');
+        .replace('Battle Royale: ', "C'est ");
 
     const timeText = $(
         'main.wrapper > div.row > div.col-lg-6 > div.row > div.col-lg-8 > div > h5'
