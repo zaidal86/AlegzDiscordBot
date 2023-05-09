@@ -1,4 +1,8 @@
-const startDate: Date = new Date('2023-05-06');
+import { utcToZonedTime, format } from 'date-fns-tz';
+
+const PARIS_TIMEZONE = 'Europe/Paris';
+
+const startDate: Date = utcToZonedTime(new Date('2023-05-06'), PARIS_TIMEZONE);
 const schedule: { start: number; end: number }[] = [
     { start: 5, end: 13 },
     { start: 5, end: 13 },
@@ -13,14 +17,16 @@ const schedule: { start: number; end: number }[] = [
 ];
 
 export const autoSchedule = (): string => {
-    const today: Date = new Date();
+    const today: Date = utcToZonedTime(new Date(), PARIS_TIMEZONE);
     let output: string = '';
 
     const daysSinceStart: number = Math.floor(
         (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
     );
     const scheduleIndex: number = daysSinceStart % schedule.length;
-    const currentHour: number = today.getHours();
+    const currentHour: number = parseInt(
+        format(today, 'H', { timeZone: PARIS_TIMEZONE })
+    );
 
     if (schedule[scheduleIndex].start === null) {
         output = "Aujourd'hui, auto ne travaille pas.";
