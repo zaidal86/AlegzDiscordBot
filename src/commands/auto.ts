@@ -1,23 +1,44 @@
+const startDate: Date = new Date('2023-05-06');
+const schedule: { start: number; end: number }[] = [
+    { start: 5, end: 13 },
+    { start: 5, end: 13 },
+    { start: 13, end: 21 },
+    { start: 13, end: 21 },
+    { start: 21, end: 5 },
+    { start: 21, end: 5 },
+    { start: null, end: null },
+    { start: null, end: null },
+    { start: null, end: null },
+    { start: null, end: null },
+];
+
 export const autoSchedule = (): string => {
-    const startDate: Date = new Date('2023-05-06');
     const today: Date = new Date();
+    let output: string = '';
 
-    const daysDifference: number =
-        Math.floor(
-            (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-        ) % 14;
+    const daysSinceStart: number = Math.floor(
+        (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    const scheduleIndex: number = daysSinceStart % schedule.length;
+    const currentHour: number = today.getHours();
 
-    let schedule: string;
-
-    if (daysDifference >= 0 && daysDifference < 2) {
-        schedule = "Aujourd'hui, auto travaille de 5h à 13h.";
-    } else if (daysDifference >= 2 && daysDifference < 4) {
-        schedule = "Aujourd'hui, auto travaille de 13h à 21h.";
-    } else if (daysDifference >= 4 && daysDifference < 6) {
-        schedule = "Aujourd'hui, auto travaille de 21h à 5h.";
+    if (schedule[scheduleIndex].start === null) {
+        output = "Aujourd'hui, auto ne travaille pas.";
+    } else if (currentHour < schedule[scheduleIndex].end) {
+        output =
+            "Aujourd'hui, auto travaille de " +
+            schedule[scheduleIndex].start +
+            'h à ' +
+            schedule[scheduleIndex].end +
+            'h.';
     } else {
-        schedule = "Aujourd'hui, auto ne travaille pas.";
+        output =
+            'Demain, auto travaille de ' +
+            schedule[scheduleIndex + 1].start +
+            'h à ' +
+            schedule[scheduleIndex + 1].end +
+            'h.';
     }
 
-    return schedule;
+    return output;
 };
