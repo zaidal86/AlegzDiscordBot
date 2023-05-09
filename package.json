@@ -7,7 +7,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "dev": "npm run build && node dist/index.js",
-    "start": "git pull origin main && npm run build && pm2 start dist/index.js"
+    "start": "git pull origin main && npm install && npm run build && pm2 start dist/index.js"
   },
   "keywords": [],
   "author": "",
