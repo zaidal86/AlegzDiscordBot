@@ -1,9 +1,9 @@
 import { utcToZonedTime, format } from 'date-fns-tz';
 
-const PARIS_TIMEZONE = 'Europe/Paris';
+const PARIS_TIMEZONE: string = 'Europe/Paris';
 
 const startDate: Date = utcToZonedTime(new Date('2023-05-06'), PARIS_TIMEZONE);
-const schedule: { start: number; end: number }[] = [
+const schedule: { start: number | null; end: number | null }[] = [
     { start: 5, end: 13 },
     { start: 5, end: 13 },
     { start: 13, end: 21 },
@@ -16,17 +16,30 @@ const schedule: { start: number; end: number }[] = [
     { start: null, end: null },
 ];
 
-const isWorkDay = (schedule) => schedule.start !== null;
+const isWorkDay = (schedule: {
+    start: number | null;
+    end: number | null;
+}): boolean => schedule.start !== null;
 
-const isCurrentShift = (currentHour, schedule) =>
-    schedule.start < schedule.end
+const isCurrentShift = (
+    currentHour: number,
+    schedule: { start: number | null; end: number | null }
+): boolean =>
+    schedule.start !== null &&
+    schedule.end !== null &&
+    (schedule.start < schedule.end
         ? currentHour >= schedule.start && currentHour < schedule.end
-        : currentHour >= schedule.start || currentHour < schedule.end;
+        : currentHour >= schedule.start || currentHour < schedule.end);
 
-const scheduleToString = (schedule) =>
-    ` de ${schedule.start}h à ${schedule.end}h.`;
+const scheduleToString = (schedule: {
+    start: number | null;
+    end: number | null;
+}): string =>
+    schedule.start !== null && schedule.end !== null
+        ? ` de ${schedule.start}h à ${schedule.end}h.`
+        : '';
 
-const getNextIndex = (currentIndex, arrayLength) =>
+const getNextIndex = (currentIndex: number, arrayLength: number): number =>
     (currentIndex + 1) % arrayLength;
 
 export const autoSchedule = (): string => {
