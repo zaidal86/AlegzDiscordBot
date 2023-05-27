@@ -16,10 +16,21 @@ const schedule: { start: number; end: number }[] = [
     { start: null, end: null },
 ];
 
+const isWorkDay = (schedule) => schedule.start !== null;
+
+const isCurrentShift = (currentHour, schedule) =>
+    schedule.start < schedule.end
+        ? currentHour >= schedule.start && currentHour < schedule.end
+        : currentHour >= schedule.start || currentHour < schedule.end;
+
+const scheduleToString = (schedule) =>
+    ` de ${schedule.start}h à ${schedule.end}h.`;
+
+const getNextIndex = (currentIndex, arrayLength) =>
+    (currentIndex + 1) % arrayLength;
+
 export const autoSchedule = (): string => {
     const today: Date = utcToZonedTime(new Date(), PARIS_TIMEZONE);
-    let output: string = '';
-
     const daysSinceStart: number = Math.floor(
         (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
     );
@@ -28,23 +39,19 @@ export const autoSchedule = (): string => {
         format(today, 'H', { timeZone: PARIS_TIMEZONE })
     );
 
-    if (schedule[scheduleIndex].start === null) {
-        output = "Aujourd'hui, auto ne travaille pas.";
-    } else if (currentHour < schedule[scheduleIndex].end) {
-        output =
-            "Aujourd'hui, auto travaille de " +
-            schedule[scheduleIndex].start +
-            'h à ' +
-            schedule[scheduleIndex].end +
-            'h.';
-    } else {
-        output =
-            'Demain, auto travaille de ' +
-            schedule[scheduleIndex + 1].start +
-            'h à ' +
-            schedule[scheduleIndex + 1].end +
-            'h.';
+    if (!isWorkDay(schedule[scheduleIndex])) {
+        return "Aujourd'hui, auto ne travaille pas.";
     }
 
-    return output;
+    if (isCurrentShift(currentHour, schedule[scheduleIndex])) {
+        return (
+            "Aujourd'hui, auto travaille" +
+            scheduleToString(schedule[scheduleIndex])
+        );
+    }
+
+    return (
+        'Demain, auto travaille' +
+        scheduleToString(schedule[getNextIndex(scheduleIndex, schedule.length)])
+    );
 };
