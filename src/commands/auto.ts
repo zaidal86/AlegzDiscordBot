@@ -19,7 +19,7 @@ const schedule: { start: number | null; end: number | null }[] = [
 const isWorkDay = (schedule: {
     start: number | null;
     end: number | null;
-}): boolean => schedule.start !== null;
+}): boolean => schedule.start !== null && schedule.end !== null;
 
 const isCurrentShift = (
     currentHour: number,

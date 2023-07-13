@@ -30,7 +30,7 @@
     "arrowParens": "always"
   },
   "devDependencies": {
-    "@types/node": "^20.1.0",
+    "@types/node": "^20.4.2",
     "typescript": "^5.0.4"
   }
 }
