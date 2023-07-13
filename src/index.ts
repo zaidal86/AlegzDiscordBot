@@ -1,7 +1,7 @@
 import Eris from 'eris';
 import dotenv from 'dotenv';
 import { headsOrTails } from './commands/heads-or-tails';
-import { currentPubMap } from './commands/apex';
+// import { currentPubMap } from './commands/apex';
 import { autoSchedule } from './commands/auto';
 
 dotenv.config();
@@ -47,9 +47,9 @@ bot.on('messageCreate', async (msg: Eris.Message) => {
                 'Cela va au delà de mes compétences.'
             );
             break;
-        case '!rota':
-            bot.createMessage(msg.channel.id, await currentPubMap());
-            break;
+        // case '!rota':
+        //     bot.createMessage(msg.channel.id, await currentPubMap());
+        //     break;
         case '!auto':
             bot.createMessage(msg.channel.id, autoSchedule());
             break;
@@ -64,9 +64,9 @@ bot.on('interactionCreate', async (interaction: Eris.CommandInteraction) => {
         case 'plouf':
             interaction.createMessage('Cela va au delà de mes compétences.');
             break;
-        case 'rota':
-            interaction.createMessage(await currentPubMap());
-            break;
+        // case 'rota':
+        //     interaction.createMessage(await currentPubMap());
+        //     break;
         case 'auto':
             interaction.createMessage(autoSchedule());
             break;
