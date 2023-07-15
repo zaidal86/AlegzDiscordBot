@@ -1,47 +1,21 @@
 import axios, { AxiosResponse } from 'axios';
-import { load as cheerioLoad } from 'cheerio';
-import { parse, format, addHours } from 'date-fns';
 
-const url: string = 'https://apexlegendsstatus.com/current-map';
+interface MapRotationData {
+    battle_royale: {
+        current: {
+            map: string;
+            remainingTimer: string;
+        };
+    };
+}
+
+const url: string = `https://api.mozambiquehe.re/maprotation?version=5&auth=${process.env.APEX_TOKEN}`;
 
 export const currentPubMap = async (): Promise<string> => {
-    const response: AxiosResponse = await axios.get(url);
-    const html: string = response.data;
-    const $ = cheerioLoad(html);
+    const response: AxiosResponse<MapRotationData> = await axios.get(url);
+    const data: MapRotationData = response.data;
 
-    let pubMap: string = $(
-        'main.wrapper > div.row > div.col-lg-6 > div.row > div.col-lg-8 > div > h1'
-    )
-        .first()
-        .text()
-        .replace('Battle Royale: ', "C'est ");
-
-    const timeText: string = $(
-        'main.wrapper > div.row > div.col-lg-6 > div.row > div.col-lg-8 > div > h5'
-    )
-        .first()
-        .text();
-
-    const [, startTime, endTime] = timeText.match(
-        /From (\d{2}:\d{2}) to (\d{2}:\d{2})/
-    ) as RegExpMatchArray;
-
-    const timezoneOffset: number = 2;
-    const adjustedStartTime: Date = addHours(
-        parse(startTime, 'HH:mm', new Date()),
-        timezoneOffset
-    );
-    const adjustedEndTime: Date = addHours(
-        parse(endTime, 'HH:mm', new Date()),
-        timezoneOffset
-    );
-
-    const formattedStartTime: string = format(adjustedStartTime, 'HH:mm');
-    const formattedEndTime: string = format(adjustedEndTime, 'HH:mm');
-
-    const adjustedTimeText: string = ` de ${formattedStartTime} à ${formattedEndTime}.`;
-
-    pubMap += adjustedTimeText;
+    const pubMap = `C'est ${data.battle_royale.current.map} pendant encore ${data.battle_royale.current.remainingTimer}`;
 
     return pubMap;
 };
